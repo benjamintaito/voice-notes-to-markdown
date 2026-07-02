@@ -127,7 +127,3 @@ resumen de forma automática a partir del transcript.
 Las sugerencias, reportes de errores y pull requests son bienvenidos. Este
 proyecto es de código abierto y puede adaptarse libremente a otros flujos de
 trabajo.
-
-## Licencia
-
-[MIT](LICENSE)
