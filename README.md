@@ -1,4 +1,4 @@
-# Voice Notes
+# Voice Notes to Markdown
 
 Transcribe notas de voz (reuniones, ideas, apuntes personales, etc.) de forma
 **100% local**, usando el modelo [Whisper de OpenAI](https://github.com/openai/whisper)
@@ -23,8 +23,8 @@ Al ser local, el audio nunca se envía a ningún servicio en la nube.
 ## Instalación
 
 ```bash
-git clone https://github.com/benjamintaito/voice-notes.git
-cd voice-notes
+git clone https://github.com/benjamintaito/voice-notes-to-markdown.git
+cd voice-notes-to-markdown
 ```
 
 Instalar ffmpeg:
