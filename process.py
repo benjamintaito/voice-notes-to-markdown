@@ -1,8 +1,9 @@
 """
-Procesa audios pendientes con Whisper (faster-whisper), genera una nota
-.md por cada audio (titulo + transcript) y mueve el audio a procesados.
+Processes pending audio files with Whisper (faster-whisper), generates a
+.md note per audio file (title + transcript) and moves the audio to the
+processed folder.
 
-Uso:
+Usage:
     python process.py
 """
 import re
@@ -24,7 +25,7 @@ def load_config() -> dict:
 
 def slugify_title(stem: str) -> str:
     title = re.sub(r"[_\-]+", " ", stem).strip()
-    return title if title else "Nota de voz"
+    return title if title else "Voice note"
 
 
 def unique_path(path: Path) -> Path:
@@ -44,7 +45,7 @@ def build_markdown(title: str, source_filename: str, created: datetime, transcri
         f"title: \"{title}\"\n"
         f"date: {created.strftime('%Y-%m-%d %H:%M')}\n"
         f"source_audio: \"{source_filename}\"\n"
-        "tags: [nota-de-voz]\n"
+        "tags: [voice-note]\n"
         "---\n\n"
     )
     body = (
@@ -58,24 +59,24 @@ def build_markdown(title: str, source_filename: str, created: datetime, transcri
 def main():
     config = load_config()
 
-    pendientes_dir = BASE_DIR / config["paths"]["pendientes"]
-    procesados_dir = BASE_DIR / config["paths"]["procesados"]
-    notas_dir = BASE_DIR / config["paths"]["notas"]
-    for d in (pendientes_dir, procesados_dir, notas_dir):
+    pending_dir = BASE_DIR / config["paths"]["pending"]
+    processed_dir = BASE_DIR / config["paths"]["processed"]
+    notes_dir = BASE_DIR / config["paths"]["notes"]
+    for d in (pending_dir, processed_dir, notes_dir):
         d.mkdir(parents=True, exist_ok=True)
 
-    extensiones = set(e.lower() for e in config["extensiones_soportadas"])
-    audios = sorted(
-        p for p in pendientes_dir.iterdir()
-        if p.is_file() and p.suffix.lower() in extensiones
+    extensions = set(e.lower() for e in config["supported_extensions"])
+    audio_files = sorted(
+        p for p in pending_dir.iterdir()
+        if p.is_file() and p.suffix.lower() in extensions
     )
 
-    if not audios:
-        print(f"No hay audios nuevos en {pendientes_dir}")
+    if not audio_files:
+        print(f"No new audio files found in {pending_dir}")
         return
 
-    print(f"Encontrados {len(audios)} audio(s). Cargando modelo Whisper "
-          f"({config['whisper']['model_size']})... (puede demorar la primera vez)")
+    print(f"Found {len(audio_files)} audio file(s). Loading Whisper model "
+          f"({config['whisper']['model_size']})... (this may take a while the first time)")
 
     from faster_whisper import WhisperModel
 
@@ -85,8 +86,8 @@ def main():
         compute_type=config["whisper"]["compute_type"],
     )
 
-    for audio_path in audios:
-        print(f"\nProcesando: {audio_path.name}")
+    for audio_path in audio_files:
+        print(f"\nProcessing: {audio_path.name}")
         try:
             segments, info = model.transcribe(
                 str(audio_path),
@@ -96,26 +97,26 @@ def main():
             transcript = " ".join(segment.text.strip() for segment in segments)
 
             if not transcript.strip():
-                print("  ADVERTENCIA: transcripción vacía, se deja el audio sin mover.")
+                print("  WARNING: empty transcript, leaving the audio file in place.")
                 continue
 
             title = slugify_title(audio_path.stem)
             created = datetime.fromtimestamp(audio_path.stat().st_mtime)
             md_content = build_markdown(title, audio_path.name, created, transcript)
 
-            md_path = unique_path(notas_dir / f"{audio_path.stem}.md")
+            md_path = unique_path(notes_dir / f"{audio_path.stem}.md")
             md_path.write_text(md_content, encoding="utf-8")
-            print(f"  Nota creada: {md_path}")
+            print(f"  Note created: {md_path}")
 
-            destino = unique_path(procesados_dir / audio_path.name)
-            shutil.move(str(audio_path), str(destino))
-            print(f"  Audio movido a: {destino}")
+            destination = unique_path(processed_dir / audio_path.name)
+            shutil.move(str(audio_path), str(destination))
+            print(f"  Audio moved to: {destination}")
 
         except Exception as exc:
-            print(f"  ERROR procesando {audio_path.name}: {exc}", file=sys.stderr)
-            print("  El audio se deja en la carpeta de pendientes para reintentar.")
+            print(f"  ERROR processing {audio_path.name}: {exc}", file=sys.stderr)
+            print("  The audio file is left in the pending folder to retry later.")
 
-    print("\nListo.")
+    print("\nDone.")
 
 
 if __name__ == "__main__":

@@ -1,18 +1,18 @@
-# Configuración de voice-notes
-# Rutas: puedes apuntar "notas" directo a una carpeta dentro de tu vault de Obsidian.
+# Voice Notes to Markdown configuration
+# Paths: you can point "notes" directly to a folder inside your Obsidian vault.
 
 paths:
-  pendientes: "audios_pendientes"
-  procesados: "audios_procesados"
-  notas: "notas"
+  pending: "pending_audio"
+  processed: "processed_audio"
+  notes: "notes"
 
 whisper:
-  model_size: "small"   # tiny, base, small, medium, large-v3 (más grande = mejor calidad, más lento)
+  model_size: "small"   # tiny, base, small, medium, large-v3 (bigger = better quality, slower)
   language: "es"
   device: "cpu"
-  compute_type: "int8"  # int8 es rápido en CPU; usar "float16" si se usa GPU (device: "cuda")
+  compute_type: "int8"  # int8 is fast on CPU; use "float16" if running on GPU (device: "cuda")
 
-extensiones_soportadas:
+supported_extensions:
   - .mp3
   - .m4a
   - .wav

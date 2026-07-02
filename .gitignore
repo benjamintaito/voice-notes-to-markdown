@@ -3,10 +3,10 @@ venv/
 __pycache__/
 *.pyc
 
-# audios y notas reales no van al repo, solo la estructura
-audios_pendientes/*
-!audios_pendientes/.gitkeep
-audios_procesados/*
-!audios_procesados/.gitkeep
-notas/*
-!notas/.gitkeep
+# actual audio files and notes are not tracked, only the folder structure
+pending_audio/*
+!pending_audio/.gitkeep
+processed_audio/*
+!processed_audio/.gitkeep
+notes/*
+!notes/.gitkeep
