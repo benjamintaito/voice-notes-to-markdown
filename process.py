@@ -1,6 +1,6 @@
 """
-Procesa audios pendientes con Whisper local (faster-whisper), genera una nota
-.md por cada audio (titulo + resumen + transcript) y mueve el audio a procesados.
+Procesa audios pendientes con Whisper (faster-whisper), genera una nota
+.md por cada audio (titulo + transcript) y mueve el audio a procesados.
 
 Uso:
     python process.py
@@ -49,8 +49,6 @@ def build_markdown(title: str, source_filename: str, created: datetime, transcri
     )
     body = (
         f"# {title}\n\n"
-        "## Resumen\n\n"
-        "_(pendiente)_\n\n"
         "## Transcript\n\n"
         f"{transcript.strip()}\n"
     )

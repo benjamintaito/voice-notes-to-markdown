@@ -1,12 +1,11 @@
 # Voice Notes to Markdown
 
-Transcribe notas de voz (reuniones, ideas, apuntes personales, etc.) de forma
-**100% local**, usando el modelo [Whisper de OpenAI](https://github.com/openai/whisper)
-para reconocer el audio, y genera automáticamente una nota en Markdown lista
-para usar en [Obsidian](https://obsidian.md/), con título, resumen y
-transcript.
+Transcribe notas de voz (reuniones, ideas, apuntes personales, etc.) usando
+el modelo [Whisper de OpenAI](https://github.com/openai/whisper) para
+reconocer el audio, y genera automáticamente una nota en Markdown lista para
+usar en [Obsidian](https://obsidian.md/), con título y transcript.
 
-Al ser local, el audio nunca se envía a ningún servicio en la nube.
+El audio nunca se envía a ningún servicio en la nube.
 
 ## ¿Cómo funciona?
 
@@ -36,7 +35,7 @@ sudo apt install ffmpeg    # Linux (Debian/Ubuntu)
 ```
 
 Crear el entorno virtual e instalar las dependencias (incluye `faster-whisper`,
-la librería que corre el modelo Whisper de forma local):
+la librería que corre el modelo Whisper):
 
 ```bash
 python -m venv .venv
@@ -65,19 +64,8 @@ Las notas quedan en `notas/` y los audios ya procesados en
 - `whisper.device` / `compute_type`: `cpu` / `int8` sin GPU; `cuda` /
   `float16` con GPU NVIDIA para acelerar el procesamiento.
 
-## Sobre el resumen
-
-Por ahora la sección `## Resumen` queda como marcador (`_(pendiente)_`) para
-completar manualmente. Más adelante se puede conectar un modelo de lenguaje
-(local vía [Ollama](https://ollama.com/), o una API externa) que lo genere
-automáticamente a partir del transcript.
-
 ## Notas adicionales
 
 - La primera vez que se ejecuta el script, se descarga el modelo Whisper
-  elegido y queda cacheado localmente para las próximas ejecuciones.
+  elegido y queda cacheado para las próximas ejecuciones.
 - El nombre del archivo de audio se usa como título de la nota.
-
-## Contribuciones
-
-Sugerencias, reportes de errores y pull requests son bienvenidos.
